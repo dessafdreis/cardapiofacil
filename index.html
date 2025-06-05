@@ -1,50 +1,11 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+       <!DOCTYPE html>
 <html>
 
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Elinha Lanches - Seja bem-vindo!</title>
+        <title>Restaurante - Seja bem-vindo!</title>
 
         <link rel="stylesheet" href="./css/bootstrap.min.css" />
         <link rel="stylesheet" href="./css/fontawesome.css" />
@@ -60,15 +21,13 @@
 
         </div>
 
-        <a class="botao-carrinho animate_animated animate_bounceIn hidden" onclick="cardapio.metodos.abrirCarrinho(true)">
+        <a class="botao-carrinho animated bounceIn hidden" onclick="cardapio.metodos.abrirCarrinho(true)">
             <div class="badge-total-carrinho">0</div>
-            <i class="fab fa-shopping-bag"></i>
+            <i class="fa fa-shopping-bag"></i>
         </a>
 
-        <!-- Header -->
         <section class="header">
             <div class="container">
-                <!--NavBar-->
                 <nav class="navbar navbar-expand-lg pl-0 pr-0 col-one">
                     <a class="navbar-brand wow fadeIn" href="#">
                         <img src="./img/logo.png" width="160" class="img-logo" />
@@ -80,10 +39,18 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavDropdown">
                         <ul class="navbar-nav ml-auto mr-auto wow fadeIn">
-                            <li class="nav-item"><a href="#reservas" class="nav-link"><b>Reservas</b></a></li>
-                            <li class="nav-item"><a href="#servicos" class="nav-link"><b>Serviços</b></a></li>
-                            <li class="nav-item"><a href="#cardapio" class="nav-link"><b>Cardápio</b></a></li>
-                            <li class="nav-item"><a href="#depoimentos" class="nav-link"><b>Depoimentos</b></a></li>
+                            <li class="nav-item">
+                                <a href="#reservas" class="nav-link"><b>Reservas</b></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#servicos" class="nav-link"><b>Serviços</b></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#cardapio" class="nav-link"><b>Cardápio</b></a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#depoimentos" class="nav-link"><b>Depoimentos</b></a>
+                            </li>
                         </ul>
                         <a class="btn btn-white btn-icon wow fadeIn" onclick="cardapio.metodos.abrirCarrinho(true)">
                             Meu carrinho <span class="icon">
@@ -96,7 +63,6 @@
             </div>
         </section>
 
-        <!-- Banner -->
         <section class="banner">
             <div class="container">
                 <div class="row">
@@ -107,24 +73,25 @@
                                 Aproveite nosso cardápio! Escolha o que desejar e recebe em sua casa de forma rápida e segura.
                             </p>
                             <div class="wow fadeIn delay-05s">
-                                <a class="btn btn-yellow mt-4 mr-3">Ver cardápio</a>
-                                <a href="#cardapio" class="btn btn-white btn-icon-left mt-4" id="btnLigar">
-                                        <span class="icon-left">
-                                        
-                                     <i class="fab fa-whatsapp"></i></span>   
-                                    (21) 99254-7761 
-                                <a href="https://wa.me/5521992547761" class="btn btn-white btn-icon-left mt-4" id="btnLigar"></a>
+                                <a class="btn btn-yellow mt-4 mr-3">
+                                    Ver cardápio
+                                </a>
+                                <a href="#" class="btn btn-white btn-icon-left mt-4" id="btnLigar">
+                                    <span class="icon-left">
+                                        <i class="fa fa-phone"></i>
+                                    </span>
+                                    (17) 99168-6069
                                 </a>
                             </div>
                         </div>
-                        <a href="https://www.instagram.com/elinhalanchesoficial/" target="_blank" class="btn btn-sm btn-white btn-social mt-4 mr-3"></a>
-                            <i class="fa fa-instagram"></i>
+                        <a href="https://www.instagram.com/limafront/" target="_blank" class="btn btn-sm btn-white btn-social mt-4 mr-3 wow fadeIn delay-05s">
+                            <i class="fab fa-instagram"></i>
                         </a>
                         <a class="btn btn-sm btn-white btn-social mt-4 mr-3 wow fadeIn delay-05s">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="https://wa.me/5521992547761" class="btn btn-sm btn-white btn-social mt-4 wow fadeIn delay-05s">
-                            <i class="fa fa-whatsapp"></i>
+                        <a class="btn btn-sm btn-white btn-social mt-4 wow fadeIn delay-05s">
+                            <i class="fab fa-whatsapp"></i>
                         </a>
                     </div>
 
@@ -138,7 +105,7 @@
                             <br>A comida chegou quente e <br>
                             muito saborosa!"
                             <span class="card-case-name">
-                                <b>Jorge Nascimento</b>
+                                <b>Thiago Lopes</b>
                             </span>
                         </div>
                     </div>
@@ -237,6 +204,9 @@
 
                     <div class="col-12 col-one">
                         <div class="row" id="itensCardapio">
+
+                            
+
                         </div>
                     </div>
                 
@@ -342,16 +312,19 @@
                                     <i class="fas fa-quote-right"></i>
                                 </p>
                             </div>
+
                         </div>
+                        
                         <a id="btnDepoimento-1" class="btn btn-sm btn-white btn-social wow fadeIn mr-3 active" onclick="cardapio.metodos.abrirDepoimento(1)">1</a>
                         <a id="btnDepoimento-2" class="btn btn-sm btn-white btn-social wow fadeIn mr-3" onclick="cardapio.metodos.abrirDepoimento(2)">2</a>
                         <a id="btnDepoimento-3" class="btn btn-sm btn-white btn-social wow fadeIn" onclick="cardapio.metodos.abrirDepoimento(3)">3</a>
+
                     </div>
+
                 </div>
             </div>
         </section>
 
-         <!-- Reservas -->
         <section class="reserva" id="reservas">
             <div class="container">
                 <div class="row">
@@ -392,7 +365,6 @@
             </div>
         </section>
 
-        <!-- Footer -->
         <footer>
             <div class="container">
                 <div class="row">
@@ -403,7 +375,7 @@
 
                     <div class="col-12 col-lg-6 col-md-6 col-sm-12 col-one container-texto-footer wow fadeIn">
                         <p class="mb-0">
-                            <b>Elinha Lanches</b> &copy; Todos os direitos reservados
+                            <b>cardapiofacil</b> &copy; Todos os direitos reservados
                         </p>
                     </div>
 
@@ -424,7 +396,6 @@
         </footer>
 
 
-        <!-- Modal Carrinho -->
         <div class="modal-full animated fadeIn hidden" id="modalCarrinho">
 
             <div class="m-header">
@@ -434,8 +405,8 @@
                     </a>
                     <div class="etapas">
                         <div class="etapa etapa1 active">1</div>
-                        <div class="etapa etapa2">2</div>
-                        <div class="etapa etapa3">3</div>
+                        <div class="etapa etapa2 active">2</div>
+                        <div class="etapa etapa3 active">3</div>
                     </div>
                     <p class="title-carrinho mt-4">
                         <b id="lblTituloEtapa">Seu carrinho:</b>
@@ -619,197 +590,7 @@
         <script type="text/javascript" src="./js/dados.js"></script>
         <script type="text/javascript" src="./js/app.js"></script>
 
-        <script>new WOW().init();
-            let cart = [];
-        let etapa = 1;
-        const cardapioData = {
-            burgers: [
-                { id: 1, nome: "Hambúrguer Clássico", preco: 15.00, img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38", descricao: "Pão, carne, alface, tomate, maionese e queijo." },
-                { id: 2, nome: "Hambúrguer Especial", preco: 20.00, img: "https://images.unsplash.com/photo-1553979459-d2229ba7433b", descricao: "Pão, carne, bacon, cheddar, cebola caramelizada." }
-            ],
-            bebidas: [
-                { id: 3, nome: "Refrigerante Lata", preco: 5.00, img: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092", descricao: "Lata de 350ml (vários sabores)." },
-                { id: 4, nome: "Suco Natural", preco: 8.00, img: "https://images.unsplash.com/photo-1605093793161-7b47d4d4f24e", descricao: "Suco de laranja 500ml." }
-            ]
-        };
-        let itensVisiveis = 2;
-
-        function obterItensCardapio(categoria) {
-            document.querySelectorAll('.container-menu .btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`menu-${categoria}`).classList.add('active');
-            const itensCardapio = document.getElementById('itensCardapio');
-            itensCardapio.innerHTML = '';
-            const itens = cardapioData[categoria].slice(0, itensVisiveis);
-            itens.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'col-12 col-lg-6 col-md-6 col-sm-12 item-cardapio animate__animated animate__fadeIn';
-                div.innerHTML = `
-                    <img src="${item.img}" alt="${item.nome}" style="max-width: 100%; border-radius: 10px;">
-                    <h3>${item.nome}</h3>
-                    <p>R$ ${item.preco.toFixed(2)}</p>
-                    <p>${item.descricao}</p>
-                    <a class="btn btn-yellow btn-sm" onclick="adicionarCarrinho(${item.id}, '${item.nome}', ${item.preco})">Adicionar ao Carrinho</a>
-                `;
-                itensCardapio.appendChild(div);
-            });
-        }
-
-        function verMais() {
-            itensVisiveis += 2;
-            const categoria = document.querySelector('.container-menu .btn.active').id.replace('menu-', '');
-            obterItensCardapio(categoria);
-        }
-
-        function adicionarCarrinho(id, nome, preco) {
-            cart.push({ id, nome, preco });
-            updateCarrinho();
-            showMessage('Item adicionado ao carrinho!');
-        }
-
-        function updateCarrinho() {
-            const badge = document.querySelectorAll('.badge-total-carrinho');
-            badge.forEach(b => b.textContent = cart.length);
-            const itensCarrinho = document.getElementById('itensCarrinho');
-            itensCarrinho.innerHTML = '';
-            let subtotal = 0;
-            cart.forEach((item, index) => {
-                subtotal += item.preco;
-                const div = document.createElement('div');
-                div.className = 'col-12 item-carrinho';
-                div.innerHTML = `
-                    <div class="dados-produto">
-                        <p><b>${item.nome}</b></p>
-                        <p>R$ ${item.preco.toFixed(2)}</p>
-                        <a class="btn btn-danger btn-sm" onclick="removerCarrinho(${index})">Remover</a>
-                    </div>
-                `;
-                itensCarrinho.appendChild(div);
-            });
-            document.getElementById('lblSubTotal').textContent = `R$ ${subtotal.toFixed(2)}`;
-            document.getElementById('lblValorTotal').textContent = `R$ ${subtotal.toFixed(2)}`;
-        }
-
-        function removerCarrinho(index) {
-            cart.splice(index, 1);
-            updateCarrinho();
-            showMessage('Item removido do carrinho!');
-        }
-
-        function abrirCarrinho(abrir) {
-            const modal = document.getElementById('modalCarrinho');
-            modal.classList.toggle('d-none', !abrir);
-            if (abrir) {
-                etapa = 1;
-                updateEtapa();
-                updateCarrinho();
-            }
-        }
-
-        function carregarEndereco() {
-            if (cart.length === 0) {
-                showMessage('Adicione itens ao carrinho antes de continuar.');
-                return;
-            }
-            etapa = 2;
-            updateEtapa();
-        }
-
-        function resumoPedido() {
-            const cep = document.getElementById('txtCEP').value;
-            const endereco = document.getElementById('txtEndereco').value;
-            const bairro = document.getElementById('txtBairro').value;
-            const numero = document.getElementById('txtNumero').value;
-            const cidade = document.getElementById('txtCidade').value;
-            const complemento = document.getElementById('txtComplemento').value;
-            const uf = document.getElementById('ddlUf').value;
-            if (!cep || !endereco || !bairro || !numero || !cidade || uf === '-1') {
-                showMessage('Preencha todos os campos de endereço.');
-                return;
-            }
-            etapa = 3;
-            updateEtapa();
-            const resumoItens = document.getElementById('listaItensResumo');
-            resumoItens.innerHTML = '';
-            cart.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'col-12 item-carrinho';
-                div.innerHTML = `<p><b>${item.nome}</b> - R$ ${item.preco.toFixed(2)}</p>`;
-                resumoItens.appendChild(div);
-            });
-            document.getElementById('resumoEndereco').textContent = `${endereco}, ${numero} - ${bairro} ${complemento ? `, ${complemento}` : ''}`;
-            document.getElementById('cidadeEndereco').textContent = `${cidade} - ${uf}`;
-            const message = `Novo Pedido!\nEndereço: ${endereco}, ${numero}, ${bairro}, ${cidade} - ${uf}${complemento ? `, ${complemento}` : ''}\nItens:\n${cart.map(item => `${item.nome} - R$ ${item.preco.toFixed(2)}`).join('\n')}`;
-            const encodedMessage = encodeURIComponent(message);
-            document.getElementById('btnEtapaResumo').href = `https://wa.me/5521992547761?text=${encodedMessage}`;
-        }
-
-        function voltarEtapa() {
-            if (etapa > 1) etapa--;
-            updateEtapa();
-        }
-
-        function updateEtapa() {
-            document.querySelectorAll('.etapa').forEach(e => e.classList.remove('active'));
-            document.querySelector(`.etapa${etapa}`).classList.add('active');
-            document.getElementById('itensCarrinho').classList.toggle('d-none', etapa !== 1);
-            document.getElementById('localEntrega').classList.toggle('d-none', etapa !== 2);
-            document.getElementById('resumoCarrinho').classList.toggle('d-none', etapa !== 3);
-            document.getElementById('btnEtapaPedido').classList.toggle('d-none', etapa !== 1);
-            document.getElementById('btnEtapaEndereco').classList.toggle('d-none', etapa !== 2);
-            document.getElementById('btnEtapaResumo').classList.toggle('d-none', etapa !== 3);
-            document.getElementById('btnVoltar').classList.toggle('d-none', etapa === 1);
-            document.getElementById('lblTituloEtapa').textContent = etapa === 1 ? 'Seu carrinho:' : etapa === 2 ? 'Endereço de entrega:' : 'Resumo do pedido:';
-        }
-
-        function buscarCep() {
-            const cep = document.getElementById('txtCEP').value.replace(/\D/g, '');
-            if (cep.length !== 8) {
-                showMessage('CEP inválido.');
-                return;
-            }
-            // Simulação de busca de CEP (sem API real para GitHub Pages)
-            document.getElementById('txtEndereco').value = 'Rua Exemplo';
-            document.getElementById('txtBairro').value = 'Bairro Exemplo';
-            document.getElementById('txtCidade').value = 'Cidade Exemplo';
-            document.getElementById('ddlUf').value = 'RJ';
-            showMessage('CEP preenchido (simulação).');
-        }
-
-        function abrirDepoimento(id) {
-            document.querySelectorAll('.depoimento').forEach(d => d.classList.add('d-none'));
-            document.querySelectorAll('.btn-social[id^="btnDepoimento"]').forEach(b => b.classList.remove('active'));
-            document.getElementById(`depoimento-${id}`).classList.remove('d-none');
-            document.getElementById(`btnDepoimento-${id}`).classList.add('active');
-        }
-
-        function showMessage(msg) {
-            const container = document.getElementById('container-mensagens');
-            const div = document.createElement('div');
-            div.className = 'alert alert-success animate__animated animate__fadeIn';
-            div.textContent = msg;
-            container.appendChild(div);
-            setTimeout(() => div.remove(), 3000);
-        }
-
-        document.getElementById('reservationForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const name = document.getElementById('resName').value;
-            const date = document.getElementById('resDate').value;
-            const time = document.getElementById('resTime').value;
-            const people = document.getElementById('resPeople').value;
-            if (!name || !date || !time || !people) {
-                showMessage('Preencha todos os campos de reserva.');
-                return;
-            }
-            const message = `Nova Reserva!\nNome: ${name}\nData: ${date}\nHorário: ${time}\nPessoas: ${people}`;
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/5521992547761?text=${encodedMessage}`, '_blank');
-            showMessage('Reserva enviada com sucesso!');
-        });
-
-        // Inicializar cardápio
-        obterItensCardapio('burgers');
-        </script>
+        <script>new WOW().init();</script>
 
     </body>
 
